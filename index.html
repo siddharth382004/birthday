@@ -11,16 +11,13 @@
     font-family:'Nunito',sans-serif;
     color:white;
     overflow:hidden;
-
-    /* 🎉 PLACE YOUR BACKGROUND IMAGE HERE 🎉 */
-    /* Example: url("birthday-bg.jpg") */
+    /* Background Image */
     background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
                 url("bff.jpg") no-repeat center center;
-    background-size: cover;   /* makes image scale for desktop & mobile */
+    background-size: cover;
     background-attachment: fixed;
   }
 
-  /* ----------- Intro Screen ----------- */
   #intro {
     display:flex;
     justify-content:center;
@@ -45,7 +42,6 @@
     background:#ff2e63;
   }
 
-  /* ----------- Celebration Screen ----------- */
   #celebration {
     display:none;
     text-align:center;
@@ -78,7 +74,6 @@
     margin:0;
   }
 
-  /* Cake */
   .cake {
     margin:50px auto;
     width:220px;
@@ -109,12 +104,10 @@
     0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}
   }
 
-  /* Fireworks Canvas */
   canvas {
     position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;
   }
 
-  /* 📱 Mobile Friendly Adjustments */
   @media (max-width:600px){
     h1 { font-size:36px; }
     .wish-card p { font-size:16px; }
@@ -147,24 +140,23 @@
       <div class="candle"><div class="flame"></div></div>
     </div>
 
-    <!-- 🎶 PLACE YOUR MUSIC FILE HERE 🎶 -->
-    <!-- Example: <source src="happy-birthday.mp3" type="audio/mpeg"> -->
-    <audio id="bgMusic" autoplay loop>
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
       <source src="hbd.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
     </audio>
   </div>
 
 <script>
-// Switch screens
-document.getElementById("enterBtn").addEventListener("click",e=>{
+// Switch screens and start music
+document.getElementById("enterBtn").addEventListener("click", e => {
   e.preventDefault();
-  document.getElementById("intro").style.display="none";
-  document.getElementById("celebration").style.display="block";
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("celebration").style.display = "block";
   startFireworks();
 
-  // Start music
-  const music=document.getElementById("bgMusic");
-  music.play().catch(()=>{}); // auto-play handling
+  const music = document.getElementById("bgMusic");
+  music.play().catch(() => console.log("Autoplay blocked, click to play manually"));
 });
 
 // Fireworks animation
@@ -208,3 +200,4 @@ function startFireworks(){
 </script>
 </body>
 </html>
+

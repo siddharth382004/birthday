@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Happy Birthday Best Friend</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    color:white;
+    overflow:hidden;
+
+    /* 🎉 PLACE YOUR BACKGROUND IMAGE HERE 🎉 */
+    /* Example: url("birthday-bg.jpg") */
+    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+                url("bff.jpg") no-repeat center center;
+    background-size: cover;   /* makes image scale for desktop & mobile */
+    background-attachment: fixed;
+  }
+
+  /* ----------- Intro Screen ----------- */
+  #intro {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+  }
+  #intro a {
+    text-decoration:none;
+    font-size:38px;
+    font-weight:bold;
+    color:white;
+    background:#ff477e;
+    padding:22px 48px;
+    border-radius:16px;
+    box-shadow:0 0 25px rgba(255,71,126,0.6), 0 0 50px rgba(255,71,126,0.4);
+    transition:transform 0.25s, box-shadow 0.25s;
+  }
+  #intro a:hover {
+    transform:scale(1.1);
+    box-shadow:0 0 35px rgba(255,71,126,0.9), 0 0 70px rgba(255,71,126,0.6);
+    background:#ff2e63;
+  }
+
+  /* ----------- Celebration Screen ----------- */
+  #celebration {
+    display:none;
+    text-align:center;
+    padding:20px;
+    min-height:100vh;
+  }
+  h1 {
+    margin-top:40px;
+    font-size:52px;
+    color:#ffd93d;
+    text-shadow:0 0 15px #ff9, 0 0 30px #f90;
+    animation:glow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow:0 0 15px #ff9, 0 0 30px #f90; }
+    to { text-shadow:0 0 25px #ff0, 0 0 50px #ff6; }
+  }
+  .wish-card {
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(8px);
+    padding:20px;
+    border-radius:16px;
+    max-width:700px;
+    margin:20px auto;
+    box-shadow:0 6px 25px rgba(0,0,0,0.3);
+  }
+  .wish-card p {
+    font-size:20px;
+    color:#fdfdfd;
+    margin:0;
+  }
+
+  /* Cake */
+  .cake {
+    margin:50px auto;
+    width:220px;
+    position:relative;
+  }
+  .layer {
+    height:46px;border-radius:14px;margin:6px 0;position:relative;
+  }
+  .top {background:#fff3d4;}
+  .middle {background:#ffd6a8;}
+  .bottom {background:#ffb37a;}
+  .icing {
+    position:absolute;left:10%;right:10%;top:-8px;height:16px;border-radius:10px;background:#fff;
+  }
+  .candle {
+    position:absolute;top:-34px;left:50%;transform:translateX(-50%);
+    width:14px;height:34px;border-radius:4px;background:linear-gradient(180deg,#ffe97b,#ffb84d);
+    box-shadow:0 0 10px #ffd93d;
+  }
+  .flame {
+    width:14px;height:18px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%,#fff,#ffeb7a,#ff6b2a);
+    margin-top:-14px;
+    animation:flicker 0.18s infinite;
+    box-shadow:0 0 20px #ff6b2a;
+  }
+  @keyframes flicker {
+    0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}
+  }
+
+  /* Fireworks Canvas */
+  canvas {
+    position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;
+  }
+
+  /* 📱 Mobile Friendly Adjustments */
+  @media (max-width:600px){
+    h1 { font-size:36px; }
+    .wish-card p { font-size:16px; }
+    .cake { width:160px; }
+    #intro a { font-size:28px; padding:16px 32px; }
+  }
+</style>
+</head>
+<body>
+  <!-- Intro Page -->
+  <div id="intro">
+    <a href="#" id="enterBtn">🎉 Click Here 🎉</a>
+  </div>
+
+  <!-- Celebration Page -->
+  <div id="celebration">
+    <canvas id="fireworks"></canvas>
+    <h1>🎂 Happy Birthday Best Friend 🎂</h1>
+    <div class="wish-card">
+      <p>
+        Happy Birthday, bestie! 💕 You make life brighter, funnier, and way more special.<br>
+        Here’s to more midnight talks, crazy laughs, and endless memories.<br>
+        Have the most amazing day—you deserve it all!
+      </p>
+    </div>
+    <div class="cake">
+      <div class="layer top"><div class="icing"></div></div>
+      <div class="layer middle"></div>
+      <div class="layer bottom"></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+
+    <!-- 🎶 PLACE YOUR MUSIC FILE HERE 🎶 -->
+    <!-- Example: <source src="happy-birthday.mp3" type="audio/mpeg"> -->
+    <audio id="bgMusic" autoplay loop>
+      <source src="hbd.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+<script>
+// Switch screens
+document.getElementById("enterBtn").addEventListener("click",e=>{
+  e.preventDefault();
+  document.getElementById("intro").style.display="none";
+  document.getElementById("celebration").style.display="block";
+  startFireworks();
+
+  // Start music
+  const music=document.getElementById("bgMusic");
+  music.play().catch(()=>{}); // auto-play handling
+});
+
+// Fireworks animation
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+window.addEventListener("resize",resize);
+function random(min,max){return Math.random()*(max-min)+min;}
+let fireworks=[];
+function createFirework(){
+  const x=random(100,canvas.width-100);
+  const y=random(100,canvas.height/2);
+  const count=100;
+  for(let i=0;i<count;i++){
+    const angle=(Math.PI*2*i)/count;
+    fireworks.push({
+      x:x,y:y,
+      vx:Math.cos(angle)*random(2,7),
+      vy:Math.sin(angle)*random(2,7),
+      life:random(50,110),
+      color:`hsl(${Math.floor(random(0,360))},100%,60%)`
+    });
+  }
+}
+function animate(){
+  ctx.fillStyle="rgba(0,0,0,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  for(let f of fireworks){
+    f.x+=f.vx; f.y+=f.vy; f.vy+=0.02; f.life--;
+    ctx.fillStyle=f.color;
+    ctx.fillRect(f.x,f.y,2,2);
+  }
+  fireworks=fireworks.filter(f=>f.life>0);
+  requestAnimationFrame(animate);
+}
+function startFireworks(){
+  resize();
+  setInterval(createFirework,1000);
+  animate();
+}
+</script>
+</body>
+</html>
